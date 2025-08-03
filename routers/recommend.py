@@ -42,21 +42,21 @@ async def recommend_jobs(payload: UserIDRequest):
     
     # print(job_ids)
     
-    results = []
+    #results = []
     
-    for job_id in job_ids:
-        job = await database.jobs.find_one({"_id": ObjectId(job_id)})
-        if job:
-            results.append({
-                "id": str(job["_id"]),
-                "type": job.get("type", "paid"),
-                "job_title": job.get("job_title", ""),
-                "description": job.get("description", ""),
-                "tags": job.get("tags", []),
-                "job_category": job.get("job_category", ""),
-            })
-        if len(results) == 5:
-            break
-    return {"jobs": results}
+    # for job_id in job_ids:
+    #     job = await database.jobs.find_one({"_id": ObjectId(job_id)})
+    #     if job:
+    #         results.append({
+    #             "id": str(job["_id"]),
+    #             "type": job.get("type", "paid"),
+    #             "job_title": job.get("job_title", ""),
+    #             "description": job.get("description", ""),
+    #             "tags": job.get("tags", []),
+    #             "job_category": job.get("job_category", ""),
+    #         })
+    #     if len(results) == 5:
+    #         break
+    return job_ids
     
 
