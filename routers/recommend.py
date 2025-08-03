@@ -2,13 +2,14 @@ from bson import ObjectId
 from fastapi import APIRouter, HTTPException
 from helper.vectorizer import user_vectorizer
 from helper.recommender import get_top_jobs
-from schemas import AllJobsResponseIn, UserProfile
+from helper.user_data import get_user_data
+from schemas import AllJobsResponseIn, UserIDRequest, UserProfile
 from db import database
 
 router = APIRouter(prefix="/recommend", tags=["recommend"])
 
 @router.post("/")
-async def recommend_jobs(profile: UserProfile):
+async def recommend_jobs(payload: UserIDRequest):
     """
     this function has a UserProfile argument. 
     UserProfile is a schema that consists of only the necessary infomartion to predict the recommendation
@@ -21,7 +22,17 @@ async def recommend_jobs(profile: UserProfile):
                         
     
     """
-    user_vector = user_vectorizer(profile.model_dump())
+    user_id = payload.user_id
+    user_data = await get_user_data(user_id)
+    if not user_data:
+        raise HTTPException(status_code=404,
+                            detail="User details not found")
+        
+    user_profile = UserProfile(**user_data)
+    
+    
+    user_vector = user_vectorizer(user_profile.model_dump(exclude={"id"}))
+    
     if user_vector is None:
         raise HTTPException(
             status_code=400,

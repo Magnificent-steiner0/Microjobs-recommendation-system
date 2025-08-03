@@ -47,3 +47,4 @@ async def get_all_jobs():
 @router.get("/all", response_model=AllJobsResponseIn)
 async def fetch_all_jobs():
     return await get_all_jobs()
+
