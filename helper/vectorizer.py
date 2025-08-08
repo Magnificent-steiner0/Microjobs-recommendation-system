@@ -10,5 +10,15 @@ def job_vectorizer(jobs):
     return matrix.toarray()
 
 def user_vectorizer(user):
-    user_texts = " ".join(user.get("skills", [])) + " ".join(user.get("preferred_type", []))
+    preference_text = " ".join(user.get("job_preference", []))
+    click_texts = []
+    # here we flattening the job clicks data into a list
+    for click in user.get("job_clicks",[]):
+        click_texts.append(click.get("job_type",""))
+        click_texts.extend(click.get("job_tags", []))
+        click_texts.append(click.get("job_category", ""))
+        
+    click_text_list = " ".join(click_texts)
+        
+    user_texts = preference_text + " " + click_text_list
     return vectorizer.transform([user_texts]).toarray()

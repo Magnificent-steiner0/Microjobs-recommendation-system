@@ -13,5 +13,5 @@ def build_faiss_index(job_vectors, job_ids):
     
 
 def get_top_jobs(user_vector, top_k=5):
-    D, I = faiss_index.search(user_vector.astype(np.float32), top_k+10)
+    D, I = faiss_index.search(user_vector.astype(np.float32), top_k+5)
     return [job_id_map[i] for i in I[0]]
